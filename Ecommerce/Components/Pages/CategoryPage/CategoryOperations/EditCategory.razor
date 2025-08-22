@@ -4,10 +4,10 @@
 @rendermode InteractiveServer
 @attribute [Authorize]
 
-<PageTitle>Thêm danh mục</PageTitle>
+<PageTitle>Sửa danh mục</PageTitle>
 
 <button onclick="location.href='/admin/categories'" class="btn btn-light">Quay lại</button>
-<h3 class="mb-4">Thêm danh mục</h3>
+<h3 class="mb-4">Sửa danh mục</h3>
 
 <EditForm Model="_category" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -41,7 +41,7 @@
         <label class="form-check-label">Kích hoạt</label>
     </div>
 
-    <button type="submit" class="btn btn-primary">Lưu sản phẩm</button>
+    <button type="submit" class="btn btn-primary">Lưu</button>
 </EditForm>
 
 @code {

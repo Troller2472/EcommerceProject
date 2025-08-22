@@ -4,4 +4,5 @@ wwwroot\bootstrap\bootstrap.css.map
 wwwroot\bootstrap\bootstrap.js
 wwwroot\bootstrap\bootstrap.js.map
 wwwroot\favicon.png
+wwwroot\logo.png
 wwwroot\noimage.png

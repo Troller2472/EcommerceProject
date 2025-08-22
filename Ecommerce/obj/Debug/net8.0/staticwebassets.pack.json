@@ -29,6 +29,10 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
+      "Id": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\wwwroot\\logo.png",
+      "PackagePath": "staticwebassets\\logo.png"
+    },
+    {
       "Id": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\wwwroot\\noimage.png",
       "PackagePath": "staticwebassets\\noimage.png"
     },
