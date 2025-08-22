@@ -1,0 +1,288 @@
+﻿@page "/products"
+@using Ecommerce.Models
+@inject EcommerceContext _dbContext
+@inject NotificationService NotificationService
+@inject ILocalStorageService LocalStorage
+@layout Buyer
+@rendermode InteractiveServer
+
+<!-- Offcanvas Giỏ hàng -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
+    <div class="offcanvas-header"> <h5 class="offcanvas-title">🛒 Giỏ hàng</h5> <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button> </div> <div class="offcanvas-body">
+        @if (cart.Count == 0)
+        {
+            <p>Giỏ hàng trống.</p>
+        }
+        else
+        {
+            <ul class="list-group mb-3">
+                @foreach (var item in cart)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center"> <div class="d-flex align-items-center"> <img src="@item.imgUrl" onerror="this.src='noimage.png'" class="me-2 rounded" style="width:50px; height:50px; object-fit:cover;" /> <div> <strong>@item.productName</strong><br /> <small>@item.price.ToString("N0") VNĐ</small> </div> </div> <!-- Điều khiển số lượng --> <div class="d-flex align-items-center"> <button class="btn btn-sm btn-outline-secondary me-1" @onclick="() => UpdateQuantity(item, item.quantity - 1)"> - </button> <input type="number" min="1" class="form-control form-control-sm text-center" style="width:60px" value="@item.quantity" @onchange="(e) => UpdateQuantity(item, int.Parse(e.Value.ToString()))" /> <button class="btn btn-sm btn-outline-secondary ms-1" @onclick="() => UpdateQuantity(item, item.quantity + 1)"> + </button> <button class="btn btn-sm btn-outline-danger ms-2" title="Xóa sản phẩm" @onclick="() => RemoveItem(item)"> ❌ </button> </div> </li>
+                }
+            </ul> <div class="d-flex justify-content-between"> <strong>Tổng:</strong> <strong class="text-danger">@cart.Sum(x => x.price * x.quantity).ToString("N0") VNĐ</strong> </div> <button onclick="location.href='/checkout'" class="btn btn-success w-100 mt-3">Thanh toán</button>
+        }
+    </div>
+</div>
+
+<!-- Nút mở giỏ hàng -->
+<div class="position-fixed end-0 top-0 p-3" style="z-index: 1050;">
+    <button data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"> 🛒 <span class="badge bg-danger">@cart.Sum(x => x.quantity)</span> </button>
+</div>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Sidebar bộ lọc (sticky) -->
+        <div class="col-md-3">
+            <div class="card sticky-top p-3 shadow-sm" style="top: 80px; z-index: 100;">
+                <h5 class="mb-3"><i class="bi bi-funnel"></i> Bộ lọc</h5>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Danh mục</label>
+                    <select class="form-select" @bind="selectedCategoryId">
+                        <option value="">-- Tất cả --</option>
+                        @foreach (var c in categories)
+                        {
+                            <option value="@c.id">@c.categoryName</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Tên sản phẩm</label>
+                    <input class="form-control" @bind="searchName" placeholder="Nhập tên..." />
+                </div>
+
+                <div class="row g-2">
+                    <div class="col">
+                        <label class="form-label fw-semibold">Giá từ</label>
+                        <input type="number" class="form-control" @bind="priceFrom" />
+                    </div>
+                    <div class="col">
+                        <label class="form-label fw-semibold">Đến</label>
+                        <input type="number" class="form-control" @bind="priceTo" />
+                    </div>
+                </div>
+
+                <div class="d-grid mt-3 gap-2">
+                    <button class="btn btn-primary" @onclick="ApplyFilter">
+                        <i class="bi bi-search"></i> Tìm kiếm
+                    </button>
+                    <button class="btn btn-outline-secondary" @onclick="ResetFilter">
+                        <i class="bi bi-arrow-counterclockwise"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid sản phẩm -->
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Danh sách sản phẩm</h4>
+                <select class="form-select w-auto" @onchange="@( (e)=> {ApplyFilter(); sortOption = e.Value.ToString() ?? "default";})">
+                    <option value="default">Mặc định</option>
+                    <option value="price_asc">Giá ↑</option>
+                    <option value="price_desc">Giá ↓</option>
+                </select>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @foreach (var p in pagedProducts)
+                {
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="position-relative overflow-hidden">
+                                <img src="@p.imgUrl"
+                                     class="card-img-top rounded-top img-fluid transition"
+                                     style="height:220px;object-fit:cover;" />
+
+                                <span class="badge bg-warning text-dark position-absolute end-0 top-0 m-2 shadow-sm">
+                                    @p.categoryName
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title text-truncate" title="@p.productName">@p.productName</h6>
+                                <p class="text-danger fw-bold mb-1">@string.Format("{0:N0} đ", p.price)</p>
+                            </div>
+                            <div class="card-footer border-0 bg-white text-center">
+                                <button @onclick="()=> AddToCart(p)"
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+
+            <!-- Pagination -->
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                        <button class="page-link" @onclick="()=>ChangePage(currentPage-1)">«</button>
+                    </li>
+
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        var index = i;
+                        <li class="page-item @(index == currentPage ? "active" : "")">
+                            <button class="page-link" @onclick="()=>ChangePage(index)">@index</button>
+                        </li>
+                    }
+
+                    <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                        <button class="page-link" @onclick="()=>ChangePage(currentPage+1)">»</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+@code {
+    List<CATEGORY> categories = new();
+    IQueryable<v_ProductCategory> query;
+    List<v_ProductCategory> pagedProducts = new();
+    List<CartItem> cart = new();
+
+    int pageSize = 9;
+    int currentPage = 1;
+    int totalCount;
+    int totalPages;
+
+    // filter
+    string searchName = "";
+    string selectedCategoryId = "";
+    double? priceFrom;
+    double? priceTo;
+    string sortOption = "default";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var savedCart = await LocalStorage.GetItemAsync<List<CartItem>>("cart");
+            if (savedCart != null) cart = savedCart;
+            StateHasChanged();
+        }
+    }
+
+    private async Task UpdateQuantity(CartItem item, int newQuantity)
+    {
+        if (newQuantity < 1) newQuantity = 1;
+        item.quantity = newQuantity;
+        await LocalStorage.SetItemAsync("cart", cart);
+        StateHasChanged();
+    }
+
+    private async Task RemoveItem(CartItem item)
+    {
+        cart.Remove(item);
+        await LocalStorage.SetItemAsync("cart", cart);
+        StateHasChanged();
+    }
+
+    private void ShowNotification(string message)
+    {
+        NotificationService.Notify(new NotificationMessage
+            {
+                Severity = NotificationSeverity.Success,
+                Summary = "Thêm giỏ hàng thành công!",
+                Detail = message,
+                Duration = 4000,
+                ShowProgress = true,
+                CloseOnClick = true,
+                Payload = DateTime.Now
+            });
+    }
+
+    private async Task AddToCart(v_ProductCategory product)
+    {
+        ShowNotification(product.productName);
+
+        var existing = cart.FirstOrDefault(p => p.id == product.id);
+        if (existing != null)
+        {
+            existing.quantity++;
+        }
+        else
+        {
+            cart.Add(new CartItem
+                {
+                    id = product.id,
+                    productName = product.productName,
+                    price = product.price ?? 0,
+                    imgUrl = product.imgUrl,
+                    quantity = 1
+                });
+        }
+        await LocalStorage.SetItemAsync("cart", cart);
+        StateHasChanged();
+    }
+
+
+    protected override void OnInitialized()
+    {
+        categories = _dbContext.CATEGORY.Where(c => c.isActive).ToList();
+        ApplyFilter();
+    }
+
+    void ApplyFilter()
+    {
+        query = _dbContext.v_ProductCategory.Where(p => p.isActive);
+
+        if (!string.IsNullOrWhiteSpace(searchName))
+            query = query.Where(p => p.productName.Contains(searchName));
+
+        if (!string.IsNullOrEmpty(selectedCategoryId))
+        {
+            var catId = long.Parse(selectedCategoryId);
+            query = query.Where(p => p.categoryId == catId);
+        }
+
+        if (priceFrom.HasValue)
+            query = query.Where(p => p.price >= priceFrom.Value);
+
+        if (priceTo.HasValue)
+            query = query.Where(p => p.price <= priceTo.Value);
+
+        // Sorting
+        query = sortOption switch
+        {
+            "price_asc" => query.OrderBy(p => p.price),
+            "price_desc" => query.OrderByDescending(p => p.price),
+            _ => query.OrderBy(p => p.id)
+        };
+
+        totalCount = query.Count();
+        totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+        LoadPage(1);
+    }
+
+    void ResetFilter()
+    {
+        searchName = "";
+        selectedCategoryId = "";
+        priceFrom = null;
+        priceTo = null;
+        sortOption = "default";
+        ApplyFilter();
+    }
+
+    void ChangePage(int page)
+    {
+        if (page < 1 || page > totalPages) return;
+        LoadPage(page);
+    }
+
+    void LoadPage(int page)
+    {
+        currentPage = page;
+        pagedProducts = query
+            .Skip((currentPage - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+    }
+}

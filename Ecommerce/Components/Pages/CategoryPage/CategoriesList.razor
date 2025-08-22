@@ -1,4 +1,4 @@
-﻿@page "/categories"
+﻿@page "/admin/categories"
 @rendermode InteractiveServer
 @inject EcommerceContext _dbContext
 @attribute [Authorize]
@@ -6,7 +6,7 @@
 <PageTitle>Danh sách danh mục</PageTitle>
 <h3>Danh sách danh mục</h3>
 
-<button onclick="location.href='/category/add'" class="btn btn-success mb-2">+ Thêm</button>
+<button onclick="location.href='/admin/category/add'" class="btn btn-success mb-2">+ Thêm</button>
 
 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="10" 
 AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
@@ -30,7 +30,7 @@ Data="@datas" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.O
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Title="Thao tác" Width="100px" Filterable="false" Sortable="false">
             <Template Context="data">
-                <button onclick="location.href='/category/edit/@data.id'" class="btn btn-success">
+                <button onclick="location.href='/admin/category/edit/@data.id'" class="btn btn-success">
                     <RadzenIcon Icon="build" />
                 </button>
                 <button @onclick="()=> RemoveProduct(data)" class="btn btn-danger">

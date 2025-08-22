@@ -22,4 +22,6 @@ public partial class ORDER
     public int? status { get; set; }
 
     public string note { get; set; }
+
+    public string email { get; set; }
 }

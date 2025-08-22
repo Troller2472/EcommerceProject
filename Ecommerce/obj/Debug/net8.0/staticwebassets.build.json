@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "cJlIJD78b5YIVX5Ig17Mwzf17bEX7W3rx8pzCtQPraA=",
+  "Hash": "1Tkt2laEx7+iVlxLhBjRigy8JTDPVP8A9UiUYj7SVTE=",
   "Source": "Ecommerce",
   "BasePath": "_content/Ecommerce",
   "Mode": "Default",
@@ -808,8 +808,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ApplicationBundle",
-      "Fingerprint": "9vesp0h7ms",
-      "Integrity": "RcP+R36aZFIF0CdQbYBIvZCylf3GUBNjAlEEc+6loGA=",
+      "Fingerprint": "wh4h61m8ap",
+      "Integrity": "BPvL75z20543XrgQJYGk6yZZWlIkWuTaT0UJSq6O3zo=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Ecommerce.styles.css"
@@ -829,8 +829,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ProjectBundle",
-      "Fingerprint": "9vesp0h7ms",
-      "Integrity": "RcP+R36aZFIF0CdQbYBIvZCylf3GUBNjAlEEc+6loGA=",
+      "Fingerprint": "wh4h61m8ap",
+      "Integrity": "BPvL75z20543XrgQJYGk6yZZWlIkWuTaT0UJSq6O3zo=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Ecommerce.bundle.scp.css"
@@ -4429,96 +4429,6 @@
       ]
     },
     {
-      "Route": "Ecommerce.9vesp0h7ms.bundle.scp.css",
-      "AssetFile": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Ecommerce.bundle.scp.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "5901"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"RcP+R36aZFIF0CdQbYBIvZCylf3GUBNjAlEEc+6loGA=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Mon, 18 Aug 2025 13:59:09 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "9vesp0h7ms"
-        },
-        {
-          "Name": "label",
-          "Value": "Ecommerce.bundle.scp.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-RcP+R36aZFIF0CdQbYBIvZCylf3GUBNjAlEEc+6loGA="
-        }
-      ]
-    },
-    {
-      "Route": "Ecommerce.9vesp0h7ms.styles.css",
-      "AssetFile": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Ecommerce.styles.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "5901"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"RcP+R36aZFIF0CdQbYBIvZCylf3GUBNjAlEEc+6loGA=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Mon, 18 Aug 2025 13:59:09 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "9vesp0h7ms"
-        },
-        {
-          "Name": "label",
-          "Value": "Ecommerce.styles.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-RcP+R36aZFIF0CdQbYBIvZCylf3GUBNjAlEEc+6loGA="
-        }
-      ]
-    },
-    {
       "Route": "Ecommerce.bundle.scp.css",
       "AssetFile": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Ecommerce.bundle.scp.css",
       "Selectors": [],
@@ -4529,7 +4439,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "5901"
+          "Value": "4513"
         },
         {
           "Name": "Content-Type",
@@ -4537,11 +4447,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"RcP+R36aZFIF0CdQbYBIvZCylf3GUBNjAlEEc+6loGA=\""
+          "Value": "\"BPvL75z20543XrgQJYGk6yZZWlIkWuTaT0UJSq6O3zo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 18 Aug 2025 13:59:09 GMT"
+          "Value": "Fri, 22 Aug 2025 14:40:57 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4551,7 +4461,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-RcP+R36aZFIF0CdQbYBIvZCylf3GUBNjAlEEc+6loGA="
+          "Value": "sha256-BPvL75z20543XrgQJYGk6yZZWlIkWuTaT0UJSq6O3zo="
         }
       ]
     },
@@ -4566,7 +4476,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "5901"
+          "Value": "4513"
         },
         {
           "Name": "Content-Type",
@@ -4574,11 +4484,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"RcP+R36aZFIF0CdQbYBIvZCylf3GUBNjAlEEc+6loGA=\""
+          "Value": "\"BPvL75z20543XrgQJYGk6yZZWlIkWuTaT0UJSq6O3zo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 18 Aug 2025 13:59:09 GMT"
+          "Value": "Fri, 22 Aug 2025 14:40:57 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4588,7 +4498,97 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-RcP+R36aZFIF0CdQbYBIvZCylf3GUBNjAlEEc+6loGA="
+          "Value": "sha256-BPvL75z20543XrgQJYGk6yZZWlIkWuTaT0UJSq6O3zo="
+        }
+      ]
+    },
+    {
+      "Route": "Ecommerce.wh4h61m8ap.bundle.scp.css",
+      "AssetFile": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Ecommerce.bundle.scp.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4513"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"BPvL75z20543XrgQJYGk6yZZWlIkWuTaT0UJSq6O3zo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 22 Aug 2025 14:40:57 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "wh4h61m8ap"
+        },
+        {
+          "Name": "label",
+          "Value": "Ecommerce.bundle.scp.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-BPvL75z20543XrgQJYGk6yZZWlIkWuTaT0UJSq6O3zo="
+        }
+      ]
+    },
+    {
+      "Route": "Ecommerce.wh4h61m8ap.styles.css",
+      "AssetFile": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\obj\\Debug\\net8.0\\scopedcss\\bundle\\Ecommerce.styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4513"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"BPvL75z20543XrgQJYGk6yZZWlIkWuTaT0UJSq6O3zo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 22 Aug 2025 14:40:57 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "wh4h61m8ap"
+        },
+        {
+          "Name": "label",
+          "Value": "Ecommerce.styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-BPvL75z20543XrgQJYGk6yZZWlIkWuTaT0UJSq6O3zo="
         }
       ]
     },

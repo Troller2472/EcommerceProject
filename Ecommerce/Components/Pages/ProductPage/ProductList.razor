@@ -1,4 +1,4 @@
-﻿@page "/products"
+﻿@page "/admin/products"
 @rendermode InteractiveServer
 @inject EcommerceContext _dbContext
 @inject DialogService DialogService
@@ -7,7 +7,7 @@
 <PageTitle>Danh sách sản phẩm</PageTitle>
 <h3>Danh sách sản phẩm</h3>
 
-<button onclick="location.href='/product/add'" class="btn btn-success mb-2">+ Thêm</button>
+<button onclick="location.href='/admin/product/add'" class="btn btn-success mb-2">+ Thêm</button>
 
 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="10" 
 AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
@@ -25,7 +25,7 @@ Data="@products" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperato
         <RadzenDataGridColumn Property="@nameof(v_ProductCategory.descriptions)" Title="Mô tả" Width="160px" />
         <RadzenDataGridColumn Title="Thao tác" Width="100px" Filterable="false" Sortable="false">
             <Template Context="data">
-                <a class="text-primary cursor-pointer" onclick="location.href='/product/edit/@data.id'">
+                <a class="text-primary cursor-pointer" onclick="location.href='/admin/product/edit/@data.id'">
                     <RadzenIcon Icon="build" />
                 </a>
                 <a class="text-danger cursor-pointer" @onclick="()=> ConfirmDelete(data)">

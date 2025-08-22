@@ -1,0 +1,287 @@
+﻿@page "/"
+@layout Buyer
+@inject EcommerceContext _dbContext
+@inject NotificationService NotificationService
+@inject ILocalStorageService LocalStorage
+@inject EcommerceContext _dbContext
+@rendermode InteractiveServer
+
+
+<!-- Offcanvas Giỏ hàng -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
+    <div class="offcanvas-header"> <h5 class="offcanvas-title">🛒 Giỏ hàng</h5> <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button> </div> <div class="offcanvas-body">
+        @if (cart.Count == 0)
+        {
+            <p>Giỏ hàng trống.</p>
+        }
+        else
+        {
+            <ul class="list-group mb-3">
+                @foreach (var item in cart)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center"> <div class="d-flex align-items-center"> <img src="@item.imgUrl" onerror="this.src='noimage.png'" class="me-2 rounded" style="width:50px; height:50px; object-fit:cover;" /> <div> <strong>@item.productName</strong><br /> <small>@item.price.ToString("N0") VNĐ</small> </div> </div> <!-- Điều khiển số lượng --> <div class="d-flex align-items-center"> <button class="btn btn-sm btn-outline-secondary me-1" @onclick="() => UpdateQuantity(item, item.quantity - 1)"> - </button> <input type="number" min="1" class="form-control form-control-sm text-center" style="width:60px" value="@item.quantity" @onchange="(e) => UpdateQuantity(item, int.Parse(e.Value.ToString()))" /> <button class="btn btn-sm btn-outline-secondary ms-1" @onclick="() => UpdateQuantity(item, item.quantity + 1)"> + </button> <button class="btn btn-sm btn-outline-danger ms-2" title="Xóa sản phẩm" @onclick="() => RemoveItem(item)"> ❌ </button> </div> </li>
+                }
+            </ul> <div class="d-flex justify-content-between"> <strong>Tổng:</strong> <strong class="text-danger">@cart.Sum(x => x.price * x.quantity).ToString("N0") VNĐ</strong> </div> <button onclick="location.href='/checkout'" class="btn btn-success w-100 mt-3">Thanh toán</button>
+        }
+    </div>
+</div>
+
+<!-- Nút mở giỏ hàng -->
+<div class="position-fixed end-0 top-0 p-3" style="z-index: 1050;">
+    <button data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"> 🛒 <span class="badge bg-danger">@cart.Sum(x => x.quantity)</span> </button>
+</div>
+
+<div class="container-fluid p-0">
+
+    <!-- Carousel sản phẩm HOT -->
+    <div id="hotCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @if (hotProducts.Any())
+            {
+                int idx = 0;
+                foreach (var product in hotProducts)
+                {
+                    <div class="carousel-item @(idx == 0 ? "active" : "")">
+                        <img src="@product.imgUrl" onerror="this.src='noimage.png'"
+                             class="d-block w-100" style="height:400px; object-fit:cover;"
+                             alt="@product.productName" />
+                        <div class="carousel-caption d-none d-md-block bg-dark rounded-3 bg-opacity-50 p-3">
+                            <span class="badge bg-danger">🔥 HOT</span>
+                            <h5>@product.productName</h5>
+                            <p class="fw-bold text-warning">@product.price?.ToString("N0") VNĐ</p>
+                            <button class="btn btn-primary btn-sm" @onclick="() => AddToCart(product)">Mua ngay</button>
+                        </div>
+                    </div>
+                    idx++;
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="d-flex align-items-center justify-content-center bg-light" style="height:400px;">
+                        <h3 class="text-muted">Chưa có sản phẩm HOT</h3>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#hotCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#hotCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+
+    <!-- Marketing intro -->
+    <div class="container my-5 text-center">
+        <h2 class="fw-bold text-primary">💡 Sonadezi Shop – Đồ điện tử rẻ cho sinh viên</h2>
+        <p class="lead text-muted">Laptop, tai nghe, chuột, bàn phím… giá sinh viên nhưng chất lượng uy tín</p>
+        <div class="mt-3">
+            <span class="badge bg-success me-2">🚀 Giao hàng nhanh</span>
+            <span class="badge bg-warning me-2">💸 Giá rẻ bất ngờ</span>
+            <span class="badge bg-info">🎓 Sinh viên tin dùng</span>
+        </div>
+    </div>
+
+    <!-- Sản phẩm bán chạy -->
+    <div class="container my-5">
+        <h3 class="fw-bold mb-4 text-center">🔥 Sản phẩm bán chạy</h3>
+        <div class="row">
+            @foreach (var product in bestSellers)
+            {
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="@product.imgUrl" onerror="this.src='noimage.png'"
+                             class="card-img-top" alt="@product.productName"
+                             style="height:200px; object-fit:cover;" />
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-truncate">@product.productName</h5>
+                            <p class="fw-bold text-danger">@product.price?.ToString("N0") VNĐ</p>
+                            <button class="btn btn-outline-primary mt-auto" @onclick="() => AddToCart(product)">Mua ngay</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Sinh viên tin dùng -->
+    <div class="container my-5">
+        <h3 class="fw-bold mb-4 text-center">🎓 Sinh viên Sonadezi tin dùng</h3>
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3">
+            @foreach (var product in studentChoice)
+            {
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="@product.imgUrl" onerror="this.src='noimage.png'"
+                             class="card-img-top" style="height:150px; object-fit:cover;" />
+                        <div class="card-body text-center">
+                            <h6 class="text-truncate">@product.productName</h6>
+                            <p class="fw-bold text-danger small">@product.price?.ToString("N0") VNĐ</p>
+                            <button class="btn btn-sm btn-success" @onclick="() => AddToCart(product)">Mua</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Toàn bộ sản phẩm -->
+    <div class="container my-5">
+        <h3 class="fw-bold mb-4 text-center">🛍️ Tất cả sản phẩm</h3>
+        <div class="row">
+            @foreach (var product in products)
+            {
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card h-100 rounded-3 border-0 shadow-sm">
+                        <img src="@product.imgUrl" onerror="this.src='noimage.png'"
+                             class="card-img-top" alt="@product.productName"
+                             style="height:200px; object-fit:cover;" />
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-truncate">@product.productName</h5>
+                            <p class="card-text text-truncate small text-muted" title="@product.descriptions">@product.descriptions</p>
+                            <p class="fw-bold text-danger">@product.price?.ToString("N0") VNĐ</p>
+                            <button class="btn btn-primary w-100 mt-auto" @onclick="() => AddToCart(product)">
+                                <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+<!-- Offcanvas giỏ hàng -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">🛒 Giỏ hàng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        @if (!cart.Any())
+        {
+            <p>Giỏ hàng trống.</p>
+        }
+        else
+        {
+            <ul class="list-group mb-3">
+                @foreach (var item in cart)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img src="@item.imgUrl" onerror="this.src='noimage.png'"
+                                 class="me-2 rounded" style="width:50px; height:50px; object-fit:cover;" />
+                            <div>
+                                <strong>@item.productName</strong><br />
+                                <small>@item.price.ToString("N0") VNĐ</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-sm btn-outline-secondary me-1" @onclick="() => UpdateQuantity(item, item.quantity - 1)">-</button>
+                            <input type="number" min="1" class="form-control form-control-sm text-center"
+                                   style="width:60px"
+                                   value="@item.quantity"
+                                   @onchange="(e) => UpdateQuantity(item, int.Parse(e.Value.ToString()))" />
+                            <button class="btn btn-sm btn-outline-secondary ms-1" @onclick="() => UpdateQuantity(item, item.quantity + 1)">+</button>
+                            <button class="btn btn-sm btn-outline-danger ms-2" @onclick="() => RemoveItem(item)">❌</button>
+                        </div>
+                    </li>
+                }
+            </ul>
+            <div class="d-flex justify-content-between">
+                <strong>Tổng:</strong>
+                <strong class="text-danger">@cart.Sum(x => x.price * x.quantity).ToString("N0") VNĐ</strong>
+            </div>
+            <button onclick="location.href='/checkout'" class="btn btn-success w-100 mt-3">Thanh toán</button>
+        }
+    </div>
+</div>
+
+@code {
+    List<PRODUCT> products = new();
+    List<PRODUCT> hotProducts = new();
+    List<PRODUCT> bestSellers = new();
+    List<PRODUCT> studentChoice = new();
+    List<CartItem> cart = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Toàn bộ sản phẩm active
+        products = await Task.Run(() => _dbContext.PRODUCT.Where(p => p.isActive).ToList());
+
+        // Hot: lấy ngẫu nhiên 5 sản phẩm
+        hotProducts = products.OrderBy(x => Guid.NewGuid()).Take(5).ToList();
+
+        // Bán chạy: lấy ngẫu nhiên 8 sản phẩm
+        bestSellers = products.OrderBy(x => Guid.NewGuid()).Take(8).ToList();
+
+        // Sinh viên tin dùng: 6 sản phẩm
+        studentChoice = products.OrderBy(x => Guid.NewGuid()).Take(6).ToList();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var savedCart = await LocalStorage.GetItemAsync<List<CartItem>>("cart");
+            if (savedCart != null) cart = savedCart;
+            StateHasChanged();
+        }
+    }
+
+    private async Task UpdateQuantity(CartItem item, int newQuantity)
+    {
+        if (newQuantity < 1) newQuantity = 1;
+        item.quantity = newQuantity;
+        await LocalStorage.SetItemAsync("cart", cart);
+        StateHasChanged();
+    }
+
+    private async Task RemoveItem(CartItem item)
+    {
+        cart.Remove(item);
+        await LocalStorage.SetItemAsync("cart", cart);
+        StateHasChanged();
+    }
+
+    private void ShowNotification(string message)
+    {
+        NotificationService.Notify(new NotificationMessage
+            {
+                Severity = NotificationSeverity.Success,
+                Summary = "Thêm giỏ hàng thành công!",
+                Detail = message,
+                Duration = 4000,
+                ShowProgress = true,
+                CloseOnClick = true,
+                Payload = DateTime.Now
+            });
+    }
+
+    private async Task AddToCart(PRODUCT product)
+    {
+        ShowNotification(product.productName);
+
+        var existing = cart.FirstOrDefault(p => p.id == product.id);
+        if (existing != null)
+        {
+            existing.quantity++;
+        }
+        else
+        {
+            cart.Add(new CartItem
+                {
+                    id = product.id,
+                    productName = product.productName,
+                    price = product.price ?? 0,
+                    imgUrl = product.imgUrl,
+                    quantity = 1
+                });
+        }
+        await LocalStorage.SetItemAsync("cart", cart);
+        StateHasChanged();
+    }
+}

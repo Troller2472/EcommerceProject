@@ -56,8 +56,8 @@ public partial class EcommerceContext : DbContext
 
         modelBuilder.Entity<ORDER>(entity =>
         {
-            entity.Property(e => e.id).ValueGeneratedNever();
             entity.Property(e => e.address).HasMaxLength(255);
+            entity.Property(e => e.email).HasMaxLength(255);
             entity.Property(e => e.name).HasMaxLength(255);
             entity.Property(e => e.note).HasMaxLength(500);
             entity.Property(e => e.phone)

@@ -1,4 +1,4 @@
-﻿@page "/category/add"
+﻿@page "/admin/category/add"
 @inject EcommerceContext _DBcontext
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
@@ -6,7 +6,7 @@
 
 <PageTitle>Thêm danh mục</PageTitle>
 
-<button onclick="location.href='/categories'" class="btn btn-light">Quay lại</button>
+<button onclick="location.href='/admin/categories'" class="btn btn-light">Quay lại</button>
 <h3 class="mb-4">Thêm danh mục</h3>
 
 <EditForm Model="_category" OnValidSubmit="HandleValidSubmit">
@@ -53,6 +53,6 @@
         await _DBcontext.SaveChangesAsync();
 
         // Sau khi thêm xong thì quay về danh sách sản phẩm
-        Navigation.NavigateTo("/categories");
+        Navigation.NavigateTo("/admin/categories");
     }
 }

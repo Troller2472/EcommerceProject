@@ -1,0 +1,271 @@
+﻿@page "/checkout"
+@inject ILocalStorageService LocalStorage
+@layout Buyer
+@inject EcommerceContext _dbContext
+@inject NavigationManager Navigation
+@inject EmailService emailService
+@rendermode InteractiveServer
+
+<div class="container">
+    <h3 class="mb-4">💳 Thanh toán</h3>
+
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="alert alert-danger">@ErrorMessage</div>
+    }
+
+    @if (cart == null || cart.Count == 0)
+    {
+        <div class="alert alert-warning">Giỏ hàng trống, vui lòng chọn sản phẩm trước khi thanh toán.</div>
+    }
+    else
+    {
+        <EditForm Model="checkoutInfo" FormName="CheckoutForm" OnValidSubmit="SubmitOrder">
+            <DataAnnotationsValidator />
+            <div class="row">
+                <!-- Form thông tin người mua -->
+                <div class="col-md-6">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            Thông tin khách hàng
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Họ tên</label>
+                                <InputText class="form-control" @bind-Value="checkoutInfo.name" />
+                                <ValidationMessage For="@(() => checkoutInfo.name)" class="text-danger" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <InputText class="form-control" rows="3" @bind-Value="checkoutInfo.email"></InputText>
+                                <ValidationMessage For="@(() => checkoutInfo.email)" class="text-danger" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Số điện thoại</label>
+                                <InputText type="tel" class="form-control" @bind-Value="checkoutInfo.phone" />
+                                <ValidationMessage For="@(() => checkoutInfo.phone)" class="text-danger" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Địa chỉ giao hàng</label>
+                                <InputTextArea class="form-control" rows="3" @bind-Value="checkoutInfo.address"></InputTextArea>
+                                <ValidationMessage For="@(() => checkoutInfo.address)" class="text-danger" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tóm tắt đơn hàng -->
+                <div class="col-md-6">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            Đơn hàng của bạn
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group mb-3">
+                                @foreach (var item in cart)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <img src="@item.imgUrl" onerror="this.src='noimage.png'"
+                                        class="me-2 rounded" style="width:50px; height:50px; object-fit:cover;" />
+                                        <div>
+                                            <strong>@item.productName</strong><br />
+                                            <small>@item.price.ToString("N0") VNĐ</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center">
+                                        <!-- nút trừ -->
+                                        <button class="btn btn-sm btn-outline-secondary me-1"
+                                        @onclick="() => UpdateQuantity(item, item.quantity - 1)">
+                                            -
+                                        </button>
+
+                                        <!-- input số lượng -->
+                                        <input type="number" min="1" class="form-control form-control-sm text-center"
+                                        style="width:60px"
+                                        value="@item.quantity"
+                                        @onchange="(e) => UpdateQuantity(item, int.Parse(e.Value.ToString()))" />
+
+                                        <!-- nút cộng -->
+                                        <button class="btn btn-sm btn-outline-secondary ms-1"
+                                        @onclick="() => UpdateQuantity(item, item.quantity + 1)">
+                                            +
+                                        </button>
+
+                                        <!-- nút xóa -->
+                                        <button class="btn btn-sm btn-outline-danger ms-3"
+                                        @onclick="() => RemoveItem(item)">
+                                            ❌
+                                        </button>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                        <div class="d-flex justify-content-between mt-2">
+                            <strong>Tổng cộng:</strong>
+                            <strong class="text-danger">@cart.Sum(x => x.price * x.quantity).ToString("N0") VNĐ</strong>
+                        </div>
+                        @if (!isSending)
+                        {
+                            <button @onclick="() => isSending = true" type="submit" class="btn btn-lg btn-success w-100 mt-3">
+                                Xác nhận đặt hàng
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-lg btn-success w-100 mt-3">
+                                    Đang hoàn tất đơn hàng.....
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    }
+
+
+</div>
+
+@code {
+    List<CartItem> cart = new();
+
+    ORDER checkoutInfo = new();
+
+    bool isSending = false;
+
+    string ErrorMessage = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var savedCart = await LocalStorage.GetItemAsync<List<CartItem>>("cart");
+            if (savedCart != null) cart = savedCart;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task UpdateCart()
+    {
+        await LocalStorage.SetItemAsync("cart", cart);
+        StateHasChanged();
+    }
+
+    private async Task UpdateQuantity(CartItem item, int newQuantity)
+    {
+        if (newQuantity < 1) newQuantity = 1; // không cho nhỏ hơn 1
+        item.quantity = newQuantity;
+        await UpdateCart();
+    }
+
+    private async Task RemoveItem(CartItem item)
+    {
+        cart.Remove(item);
+        await UpdateCart();
+    }
+
+    private async Task SubmitOrder()
+    {
+        var resultOrder = await CreateOrder(checkoutInfo);
+        if (resultOrder == null)
+        {
+            ErrorMessage = "Đã xảy ra lỗi trong quá trình đặt hàng!";
+            return;
+        }
+
+        foreach(var item in cart)
+        {
+            var resultOrderItem = await CreateOrderDetail(item, resultOrder.id);
+            if (resultOrderItem == null)
+            {
+                ErrorMessage = "Đã xảy ra lỗi trong quá trình đặt hàng!";
+                return;
+            }
+        }
+        await SendEmail();
+        Navigation.NavigateTo("/checkout/success");
+    }
+
+    private async Task<ORDER> CreateOrder(ORDER data)
+    {
+        try
+        {
+            data.status = 1;
+            data.timer = DateTime.Now;
+
+            _dbContext.ORDER.Add(data);
+
+            await _dbContext.SaveChangesAsync();
+
+            return data;
+
+        }
+        catch(Exception ex)
+        {
+            return null;
+        }
+    }
+
+    private async Task<ORDER_DETAILS> CreateOrderDetail(CartItem data, long orderId)
+    {
+        ORDER_DETAILS orderDetail = new();
+        orderDetail.orderId = orderId;
+        orderDetail.productName = data.productName;
+        orderDetail.quantity = data.quantity;
+        orderDetail.price = data.price;
+        orderDetail.productId = data.id;
+
+        _dbContext.ORDER_DETAILS.Add(orderDetail);
+
+        await _dbContext.SaveChangesAsync();
+
+        return orderDetail;
+    }
+
+    private async Task SendEmail()
+    {
+          // ✅ Tạo bảng sản phẩm trước
+    var orderRows = string.Join("", cart.Select(item => $@"
+        <tr>
+            <td>{item.productName}</td>
+            <td style='text-align:center'>{item.quantity}</td>
+            <td style='text-align:right'>{item.price:N0} VNĐ</td>
+            <td style='text-align:right'>{(item.price * item.quantity):N0} VNĐ</td>
+        </tr>"));
+
+    // ✅ Tính tổng
+    var totalPrice = cart.Sum(x => x.price * x.quantity).ToString("N0");
+
+    // ✅ Nội dung email
+    var body = $@"
+        <h2>Đơn hàng mới từ {checkoutInfo.name}</h2>
+        <p><b>SĐT:</b> {checkoutInfo.phone}</p>
+        <p><b>Địa chỉ:</b> {checkoutInfo.address}</p>
+        <hr/>
+        <table border='1' cellpadding='6' cellspacing='0' width='100%' style='border-collapse:collapse;'>
+            <tr style='background:#f2f2f2;'>
+                <th>Sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+            {orderRows}
+            <tr>
+                <td colspan='3' style='text-align:right'><b>Tổng cộng:</b></td>
+                <td style='text-align:right; color:red;'><b>{totalPrice} VNĐ</b></td>
+            </tr>
+        </table>
+        <br/>
+        <p>Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ liên hệ sớm nhất có thể.</p>
+    ";
+
+    // ✅ Gửi mail
+    emailService.SendMail(checkoutInfo.email, "Xác nhận đơn hàng - Sonadezi Shop", body);
+    }
+
+
+
+}

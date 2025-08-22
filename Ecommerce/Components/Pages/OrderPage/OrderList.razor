@@ -1,5 +1,123 @@
-﻿<h3>OrderList</h3>
+﻿@page "/admin/orders"
+@inject EcommerceContext _dbContext
+@attribute [Authorize]
+@rendermode InteractiveServer
+
+<div class="row">
+    <!-- Danh sách đơn hàng -->
+    <div class="col-6">
+        <h3 class="mb-3">📦 Đơn hàng</h3>
+        <RadzenDataGrid TItem="ORDER"
+                        AllowFiltering="true"
+                        AllowColumnResize="true"
+                        FilterMode="FilterMode.Advanced"
+                        AllowSorting="true"
+                        PageSize="10"
+                        AllowPaging="true"
+                        PagerHorizontalAlign="HorizontalAlign.Left"
+                        ShowPagingSummary="true"
+                        Data="@data"
+                        ColumnWidth="200px"
+                        SelectionMode="DataGridSelectionMode.Single"
+                        RowSelect="@OnOrderSelected">
+            <Columns>
+                <RadzenDataGridColumn Property="id" Title="Mã HĐ" Width="80px" />
+                <RadzenDataGridColumn Property="name" Title="Tên người mua" Width="150px" />
+                <RadzenDataGridColumn Property="phone" Title="Điện thoại" Width="120px" />
+                <RadzenDataGridColumn Property="address" Title="Địa chỉ" Width="160px" />
+                <RadzenDataGridColumn Property="timer" Title="Ngày đặt" Width="150px" />
+                <RadzenDataGridColumn Property="status" Title="Trạng thái" Width="120px" />
+                <RadzenDataGridColumn Property="note" Title="Ghi chú" Width="160px" />
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+
+    <!-- Chi tiết đơn hàng -->
+    <div class="col-6">
+        <h3 class="mb-3">📑 Chi tiết đơn hàng</h3>
+
+        @if (selectedOrder != null)
+        {
+            <div class="card rounded-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Khách hàng: @selectedOrder.name</h5>
+                    <p><b>Điện thoại:</b> @selectedOrder.phone</p>
+                    <p><b>Địa chỉ:</b> @selectedOrder.address</p>
+                    <p><b>Ngày đặt:</b> @selectedOrder.timer.ToString()</p>
+
+                    <div class="mb-3">
+                        <label class="form-label"><b>Trạng thái</b></label>
+                        <select class="form-select" @bind="selectedOrder.status">
+                            <option value="1">🕒 Chờ xử lý</option>
+                            <option value="2">🚚 Đang giao</option>
+                            <option value="3">✅ Hoàn tất</option>
+                            <option value="4">❌ Hủy</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><b>Ghi chú</b></label>
+                        <textarea class="form-control" rows="2" @bind="selectedOrder.note"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary me-2" @onclick="SaveOrder">💾 Lưu</button>
+                </div>
+            </div>
+
+            <h5 class="mt-4">🛒 Sản phẩm trong đơn hàng</h5>
+            <RadzenDataGrid TItem="ORDER_DETAILS"
+                            Data="@orderDetails"
+                            AllowSorting="true"
+                            AllowPaging="true"
+                            PageSize="5"
+                            ShowPagingSummary="true">
+                <Columns>
+                    <RadzenDataGridColumn Property="productName" Title="Sản phẩm" Width="200px" />
+                    <RadzenDataGridColumn Property="price" Title="Đơn giá" FormatString="{0:N0} đ" Width="120px" />
+                    <RadzenDataGridColumn Property="quantity" Title="SL" Width="80px" />
+                    <RadzenDataGridColumn Title="Thành tiền" Width="120px">
+                        <Template Context="detail">
+                            @($"{(detail.price ?? 0) * (detail.quantity ?? 0):N0} đ")
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn Property="remark" Title="Ghi chú" Width="160px" />
+                </Columns>
+            </RadzenDataGrid>
+        }
+        else
+        {
+            <div class="alert alert-info">Hãy chọn một đơn hàng để xem chi tiết.</div>
+        }
+    </div>
+</div>
 
 @code {
+    IQueryable<ORDER> data;
+    ORDER selectedOrder;
+    List<ORDER_DETAILS> orderDetails = new();
 
+    protected override async Task OnInitializedAsync()
+    {
+        data = _dbContext.ORDER;
+    }
+
+    private void OnOrderSelected(ORDER order)
+    {
+        selectedOrder = order;
+        orderDetails = _dbContext.ORDER_DETAILS
+            .Where(x => x.orderId == order.id)
+            .ToList();
+    }
+
+    private async Task SaveOrder()
+    {
+        if (selectedOrder != null)
+        {
+            _dbContext.ORDER.Update(selectedOrder);
+            await _dbContext.SaveChangesAsync();
+
+            // load lại danh sách để refresh grid
+            data = _dbContext.ORDER;
+        }
+    }
 }

@@ -24,8 +24,16 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Layout/Blank.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcQmxhbmsucmF6b3I=
+[C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Layout/Buyer.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcQnV5ZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Layout/Footer.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcRm9vdGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Layout/Header.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcSGVhZGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Pages/AccessDenied.razor]
@@ -48,8 +56,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBdXRoZW5pY2F0ZVBhZ2VcUmVnaXN0ZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Pages/BuyingTest.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xCdXlpbmdUZXN0LnJhem9y
+[C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Pages/Buyer/BuyingTest.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xCdXllclxCdXlpbmdUZXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Pages/Buyer/CheckoutPage/Checkout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xCdXllclxDaGVja291dFBhZ2VcQ2hlY2tvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Pages/Buyer/CheckoutPage/CheckoutSuccess.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xCdXllclxDaGVja291dFBhZ2VcQ2hlY2tvdXRTdWNjZXNzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Pages/Buyer/Products.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xCdXllclxQcm9kdWN0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Pages/CategoryPage/CategoriesList.razor]
@@ -64,8 +84,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDYXRlZ29yeVBhZ2VcQ2F0ZWdvcnlPcGVyYXRpb25zXEVkaXRDYXRlZ29yeS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Pages/CheckoutPage/CheckoutPage.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDaGVja291dFBhZ2VcQ2hlY2tvdXRQYWdlLnJhem9y
+[C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Pages/ContactPage/Contact.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb250YWN0UGFnZVxDb250YWN0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/ADMIN/source/repos/Ecommerce/Ecommerce/Components/Pages/Counter.razor]

@@ -17,6 +17,7 @@ builder.Services.AddDbContext<EcommerceContext>(
 
 builder.Services.AddRadzenComponents();
 builder.Services.AddScoped<ILocalStorageService, LocalStorageServices>();
+builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

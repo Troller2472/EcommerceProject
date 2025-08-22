@@ -1,4 +1,4 @@
-﻿@page "/product/add"
+﻿@page "/admin/product/add"
 @inject EcommerceContext _DBcontext
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
@@ -6,7 +6,7 @@
 
 <PageTitle>Thêm sản phẩm</PageTitle>
 
-<button onclick="location.href='/products'" class="btn btn-light">Quay lại</button>
+<button onclick="location.href='/admin/products'" class="btn btn-light">Quay lại</button>
 <h3 class="mb-4">Thêm sản phẩm</h3>
 
 <EditForm Model="_product" OnValidSubmit="HandleValidSubmit">
@@ -72,6 +72,6 @@
         await _DBcontext.SaveChangesAsync();
 
         // Sau khi thêm xong thì quay về danh sách sản phẩm
-        Navigation.NavigateTo("/products");
+        Navigation.NavigateTo("/admin/products");
     }
 }

@@ -1,0 +1,84 @@
+﻿@page "/contact"
+@layout Buyer
+@inject EmailService _emailService
+@using System.ComponentModel.DataAnnotations
+@rendermode InteractiveServer
+
+<div class="container my-5">
+    <h3 class="mb-4 text-center"><i class="bi bi-envelope-paper"></i> Liên Hệ</h3>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <EditForm Model="@contactModel" OnValidSubmit="@SendMessage">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="mb-3">
+                            <label class="form-label">Họ tên</label>
+                            <InputText class="form-control" @bind-Value="contactModel.Name" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <InputText type="email" class="form-control" @bind-Value="contactModel.Email" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại</label>
+                            <InputText type="tel" class="form-control" @bind-Value="contactModel.Phone" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Nội dung</label>
+                            <InputTextArea class="form-control" rows="4" @bind-Value="contactModel.Message" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-send"></i> Gửi liên hệ
+                        </button>
+                    </EditForm>
+
+                    @if (isSent)
+                    {
+                        <div class="alert alert-success mt-3">
+                            ✅ Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Maps -->
+    <div class="mt-5">
+        <h5 class="mb-3 text-center"><i class="bi bi-geo-alt"></i> Bản đồ</h5>
+        <div class="ratio ratio-16x9 shadow-sm">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3917.7312563620853!2d106.85538867485893!3d10.908017089248899!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174dfaaa4942ca7%3A0xe0b0790eff3ebb16!2zVHLGsOG7nW5nIENhbyDEkeG6s25nIEPDtG5nIG5naOG7hyB2w6AgUXXhuqNuIHRy4buLIFNvbmFkZXpp!5e0!3m2!1svi!2s!4v1755877216909!5m2!1svi!2s" width="600" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+</div>
+
+@code {
+    ContactModel contactModel = new();
+    bool isSent = false;
+
+    private void SendMessage()
+    {
+        string htmlBody = $@"
+            <h2>Xin chào {contactModel.Name},</h2>
+            <p>Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi đã nhận được thông tin:</p>
+            <ul>
+                <li><b>Email:</b> {contactModel.Email}</li>
+                <li><b>SĐT:</b> {contactModel.Phone}</li>
+                <li><b>Nội dung:</b> {contactModel.Message}</li>
+            </ul>
+            <p>Đội ngũ CSKH sẽ phản hồi trong thời gian sớm nhất.</p>
+            <hr/>
+            <p><i>Email này được gửi tự động từ hệ thống, vui lòng không trả lời lại.</i></p>
+        ";
+
+        _emailService.SendMail(contactModel.Email, "Xác nhận liên hệ - Sonadezi Shop Support", htmlBody);
+        isSent = true;
+    }
+}

@@ -10,25 +10,32 @@
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Trang chủ
+                <i class="bi bi-house-fill"></i> Trang chủ
             </NavLink>
         </div>
 
         <AuthorizeView>
             <Authorized>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="products">
-                        <span class="bi bi-archive" aria-hidden="true"></span> Sản phẩm
+                    <NavLink class="nav-link" href="admin/products">
+                        <i class="bi bi-bag-dash"></i>  Sản phẩm
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="categories">
-                        <span class="bi bi-bookmark" aria-hidden="true"></span> Danh mục
+                    <NavLink class="nav-link" href="admin/categories">
+                        <i class="bi bi-bookmark"></i> Danh mục
                     </NavLink>
                 </div>
+                @*
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="warehouse">
-                        <span class="bi bi-bookmark" aria-hidden="true"></span> Quản lý kho
+                    <NavLink class="nav-link" href="admin/warehouse">
+                        <i class="bi bi-archive"></i>   Quản lý kho
+                    </NavLink>
+                </div>
+                *@
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="admin/orders">
+                        <i class="bi bi-basket2-fill"></i>   Đơn hàng
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
