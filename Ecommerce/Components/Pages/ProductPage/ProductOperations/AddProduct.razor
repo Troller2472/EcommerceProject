@@ -1,0 +1,77 @@
+﻿@page "/product/add"
+@inject EcommerceContext _DBcontext
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+@attribute [Authorize]
+
+<PageTitle>Thêm sản phẩm</PageTitle>
+
+<button onclick="location.href='/products'" class="btn btn-light">Quay lại</button>
+<h3 class="mb-4">Thêm sản phẩm</h3>
+
+<EditForm Model="_product" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label class="form-label">Tên sản phẩm</label>
+        <InputText class="form-control" @bind-Value="_product.productName" />
+        <ValidationMessage For="@(() => _product.productName)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Giá</label>
+        <InputNumber class="form-control" @bind-Value="_product.price" />
+        <ValidationMessage For="@(() => _product.price)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Hình ảnh (URL)</label>
+        <InputText class="form-control" @bind-Value="_product.imgUrl" />
+        <ValidationMessage For="@(() => _product.imgUrl)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Mô tả</label>
+        <InputTextArea class="form-control" @bind-Value="_product.descriptions" />
+        <ValidationMessage For="@(() => _product.descriptions)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Danh mục</label>
+        <InputSelect @bind-Value="_product.categoryId" class="form-select">
+            <option value="">-- Chọn danh mục --</option>
+            @foreach(var cat in listCategories)
+            {
+                <option value="@cat.id">@cat.categoryName</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => _product.categoryId)" class="text-danger" />
+    </div>
+
+    <div class="form-check mb-3">
+        <InputCheckbox checked="@_product.isActive" class="form-check-input" @bind-Value="@_product.isActive" />
+        <ValidationMessage For="@(() => _product.isActive)" class="text-danger" />
+        <label class="form-check-label">Kích hoạt</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu sản phẩm</button>
+</EditForm>
+
+@code {
+    private PRODUCT _product = new PRODUCT() { isActive = true };
+    private List<CATEGORY> listCategories;
+
+    protected override void OnInitialized()
+    {
+        listCategories = _DBcontext.CATEGORY.ToList();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        _product.isDelete = false;
+        _DBcontext.PRODUCT.Add(_product);
+        await _DBcontext.SaveChangesAsync();
+
+        // Sau khi thêm xong thì quay về danh sách sản phẩm
+        Navigation.NavigateTo("/products");
+    }
+}

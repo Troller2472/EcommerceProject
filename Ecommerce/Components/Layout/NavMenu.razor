@@ -1,0 +1,50 @@
+﻿<div class="top-row navbar navbar-dark ps-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">TH App</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Trang chủ
+            </NavLink>
+        </div>
+
+        <AuthorizeView>
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="products">
+                        <span class="bi bi-archive" aria-hidden="true"></span> Sản phẩm
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="categories">
+                        <span class="bi bi-bookmark" aria-hidden="true"></span> Danh mục
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="warehouse">
+                        <span class="bi bi-bookmark" aria-hidden="true"></span> Quản lý kho
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="logout">
+                        <RadzenIcon Icon="input" /> Đăng xuất
+                    </NavLink>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="login">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Đăng nhập
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+    </nav>
+</div>
+

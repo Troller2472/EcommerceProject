@@ -1,0 +1,19 @@
+﻿@page "/logout"
+@using Microsoft.AspNetCore.Authentication
+@inject NavigationManager navigation
+<h3>Logout</h3>
+
+Bạn đã thoát!
+@code {
+	[CascadingParameter]
+	public HttpContext? httpContext { get; set; }
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		if (httpContext.User.Identity.IsAuthenticated)
+		{
+			await httpContext.SignOutAsync();
+			navigation.NavigateTo("/login", true);
+		}
+	}
+}

@@ -1,0 +1,41 @@
+﻿{
+   "ConnectionStringName": "dab-connection-string",
+   "Dacpac": null,
+   "DatabaseType": 3,
+   "MergeDacpacs": false,
+   "ProjectPath": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce",
+   "Tables": [
+      {
+         "Name": "[dbo].[CATEGORY]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FILE]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ORDER]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ORDER_DETAILS]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PRODUCT]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PROFILE]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SHOP]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[USER]",
+         "ObjectType": 0
+      }
+   ]
+}

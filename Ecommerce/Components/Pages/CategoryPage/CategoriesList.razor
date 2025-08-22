@@ -1,0 +1,67 @@
+﻿@page "/categories"
+@rendermode InteractiveServer
+@inject EcommerceContext _dbContext
+@attribute [Authorize]
+
+<PageTitle>Danh sách danh mục</PageTitle>
+<h3>Danh sách danh mục</h3>
+
+<button onclick="location.href='/category/add'" class="btn btn-success mb-2">+ Thêm</button>
+
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="10" 
+AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+Data="@datas" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single">
+    <Columns>
+        <RadzenDataGridColumn Property="@nameof(CATEGORY.id)" Title="Mã" Width="100px" />
+        <RadzenDataGridColumn Title="Ảnh" Frozen="true" Sortable="false" Filterable="false" Width="80px" TextAlign="TextAlign.Center">
+            <Template Context="data">
+                <RadzenImage Path="@data.imgUrl" class="rz-gravatar" AlternateText="@(data.categoryName)" />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(CATEGORY.categoryName)" Title="Tên danh mục" Frozen="true" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(CATEGORY.description)" Title="Mô tả" FormatString="{0:N0}" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(CATEGORY.remark)" Title="Ghi chú" Width="160px" />
+        <RadzenDataGridColumn TItem="CATEGORY" Filterable="false" Sortable="false" Title="Trạng thái" Width="100px">
+            <Template Context="c">
+                <RadzenSwitch @bind-Value="c.isActive" TValue="bool"
+                              Change="@(args => OnToggleActive(c, args))"
+                              Style="transform: scale(0.85);" />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Title="Thao tác" Width="100px" Filterable="false" Sortable="false">
+            <Template Context="data">
+                <button onclick="location.href='/category/edit/@data.id'" class="btn btn-success">
+                    <RadzenIcon Icon="build" />
+                </button>
+                <button @onclick="()=> RemoveProduct(data)" class="btn btn-danger">
+                    <RadzenIcon Icon="delete" />
+                </button>
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+<i class="fa fa-times" aria-hidden="true"></i>
+
+@code {
+    IQueryable<CATEGORY> datas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        datas = _dbContext.CATEGORY;
+    }
+
+    private async Task OnToggleActive(CATEGORY category, bool value)
+    {
+        category.isActive = value;
+        _dbContext.CATEGORY.Update(category);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private async Task RemoveProduct(CATEGORY data)
+    {
+        _dbContext.CATEGORY.Remove(data);
+        await _dbContext.SaveChangesAsync();
+    }
+}

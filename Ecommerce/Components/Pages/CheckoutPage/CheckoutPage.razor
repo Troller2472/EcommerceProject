@@ -1,0 +1,152 @@
+﻿@page "/checkout"
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<h3 class="mb-4">💳 Thanh toán</h3>
+
+@if (cart == null || cart.Count == 0)
+{
+    <div class="alert alert-warning">Giỏ hàng trống, vui lòng chọn sản phẩm trước khi thanh toán.</div>
+}
+else
+{
+    <div class="row">
+        <!-- Form thông tin người mua -->
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    Thông tin khách hàng
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Họ tên</label>
+                        <input class="form-control" @bind="checkoutInfo.name" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="tel" class="form-control" @bind="checkoutInfo.phone" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ giao hàng</label>
+                        <textarea class="form-control" rows="3" @bind="checkoutInfo.address"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tóm tắt đơn hàng -->
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-success text-white">
+                    Đơn hàng của bạn
+                </div>
+                <div class="card-body">
+                    <ul class="list-group mb-3">
+                        @foreach (var item in cart)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="@item.imgUrl" onerror="this.src='noimage.png'"
+                                    class="me-2 rounded" style="width:50px; height:50px; object-fit:cover;" />
+                                    <div>
+                                        <strong>@item.productName</strong><br />
+                                        <small>@item.price.ToString("N0") VNĐ</small>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center">
+                                    <!-- nút trừ -->
+                                    <button class="btn btn-sm btn-outline-secondary me-1"
+                                    @onclick="() => UpdateQuantity(item, item.quantity - 1)">
+                                        -
+                                    </button>
+
+                                    <!-- input số lượng -->
+                                    <input type="number" min="1" class="form-control form-control-sm text-center"
+                                    style="width:60px"
+                                    value="@item.quantity"
+                                    @onchange="(e) => UpdateQuantity(item, int.Parse(e.Value.ToString()))" />
+
+                                    <!-- nút cộng -->
+                                    <button class="btn btn-sm btn-outline-secondary ms-1"
+                                    @onclick="() => UpdateQuantity(item, item.quantity + 1)">
+                                        +
+                                    </button>
+
+                                    <!-- nút xóa -->
+                                    <button class="btn btn-sm btn-outline-danger ms-3"
+                                    @onclick="() => RemoveItem(item)">
+                                        ❌
+                                    </button>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                    <div class="d-flex justify-content-between mt-2">
+                        <strong>Tổng cộng:</strong>
+                        <strong class="text-danger">@cart.Sum(x => x.price * x.quantity).ToString("N0") VNĐ</strong>
+                    </div>
+                    <button class="btn btn-lg btn-success w-100 mt-3" @onclick="SubmitOrder">
+                        Xác nhận đặt hàng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    List<CartItem> cart = new();
+
+    ORDER checkoutInfo = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+
+            var savedCart = await LocalStorage.GetItemAsync<List<CartItem>>("cart");
+            if (savedCart != null) cart = savedCart;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task UpdateCart()
+    {
+        await LocalStorage.SetItemAsync("cart", cart);
+        StateHasChanged();
+    }
+
+    private async Task UpdateQuantity(CartItem item, int newQuantity)
+    {
+        if (newQuantity < 1) newQuantity = 1; // không cho nhỏ hơn 1
+        item.quantity = newQuantity;
+        await UpdateCart();
+    }
+
+    private async Task RemoveItem(CartItem item)
+    {
+        cart.Remove(item);
+        await UpdateCart();
+    }
+
+    private async Task SubmitOrder()
+    {
+        if (string.IsNullOrWhiteSpace(checkoutInfo.name) ||
+            string.IsNullOrWhiteSpace(checkoutInfo.address))
+        {
+            Console.WriteLine("⚠️ Vui lòng nhập đầy đủ thông tin.");
+            return;
+        }
+
+        Console.WriteLine("✅ Đặt hàng thành công!");
+
+        // Clear giỏ hàng
+        cart.Clear();
+        await LocalStorage.RemoveItemAsync("cart");
+
+        Navigation.NavigateTo("/thank-you");
+    }
+}

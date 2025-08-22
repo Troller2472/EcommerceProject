@@ -1,0 +1,57 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Ecommerce.bundle.scp.css",
+      "PackagePath": "staticwebassets\\Ecommerce.9vesp0h7ms.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\wwwroot\\bootstrap\\bootstrap.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.css"
+    },
+    {
+      "Id": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\wwwroot\\bootstrap\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\wwwroot\\bootstrap\\bootstrap.js",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.js"
+    },
+    {
+      "Id": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\wwwroot\\bootstrap\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.js.map"
+    },
+    {
+      "Id": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "C:\\Users\\ADMIN\\source\\repos\\Ecommerce\\Ecommerce\\wwwroot\\noimage.png",
+      "PackagePath": "staticwebassets\\noimage.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Ecommerce.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Ecommerce.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Ecommerce.props",
+      "PackagePath": "build\\Ecommerce.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Ecommerce.props",
+      "PackagePath": "buildMultiTargeting\\Ecommerce.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Ecommerce.props",
+      "PackagePath": "buildTransitive\\Ecommerce.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

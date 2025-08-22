@@ -1,0 +1,65 @@
+﻿@page "/category/edit/{id:long?}"
+@inject EcommerceContext _DBcontext
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+@attribute [Authorize]
+
+<PageTitle>Thêm danh mục</PageTitle>
+
+<button onclick="location.href='/categories'" class="btn btn-light">Quay lại</button>
+<h3 class="mb-4">Thêm danh mục</h3>
+
+<EditForm Model="_category" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label class="form-label">Tên danh mục</label>
+        <InputText class="form-control" @bind-Value="_category.categoryName" />
+        <ValidationMessage For="@(() => _category.categoryName)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Mô tả</label>
+        <InputText class="form-control" @bind-Value="_category.description" />
+        <ValidationMessage For="@(() => _category.description)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ghi chú</label>
+        <InputText class="form-control" @bind-Value="_category.description" />
+        <ValidationMessage For="@(() => _category.remark)" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Hình ảnh (URL)</label>
+        <InputText class="form-control" @bind-Value="_category.imgUrl" />
+        <ValidationMessage For="@(() => _category.imgUrl)" class="text-danger" />
+    </div>
+
+    <div class="form-check mb-3">
+        <InputCheckbox checked="@_category.isActive" class="form-check-input" @bind-Value="@_category.isActive" />
+        <ValidationMessage For="@(() => _category.isActive)" class="text-danger" />
+        <label class="form-check-label">Kích hoạt</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu sản phẩm</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public long id { get; set; }
+
+    private CATEGORY _category = new CATEGORY() { isActive = true };
+
+    protected override void OnParametersSet()
+    {
+        _category = _DBcontext.CATEGORY.Where(x => x.id == id).FirstOrDefault();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await _DBcontext.SaveChangesAsync();
+
+        // Sau khi thêm xong thì quay về danh sách sản phẩm
+        Navigation.NavigateTo("/categories");
+    }
+}

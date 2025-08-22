@@ -1,0 +1,76 @@
+﻿@page "/products"
+@rendermode InteractiveServer
+@inject EcommerceContext _dbContext
+@inject DialogService DialogService
+@attribute [Authorize]
+
+<PageTitle>Danh sách sản phẩm</PageTitle>
+<h3>Danh sách sản phẩm</h3>
+
+<button onclick="location.href='/product/add'" class="btn btn-success mb-2">+ Thêm</button>
+
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="10" 
+AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+Data="@products" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single">
+    <Columns>
+        <RadzenDataGridColumn Property="@nameof(v_ProductCategory.id)" Title="Mã" Width="80px" />
+        <RadzenDataGridColumn Title="Ảnh" Sortable="false" Filterable="false" Width="80px" TextAlign="TextAlign.Center">
+            <Template Context="data">
+                <RadzenImage Path="@data.imgUrl" class="rz-gravatar" AlternateText="@(data.productName)" />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(v_ProductCategory.productName)" Title="Tên SP" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(v_ProductCategory.price)" Title="Giá tiền(đ)" FormatString="{0:N0}" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(v_ProductCategory.categoryName)" Title="Tên danh mục" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(v_ProductCategory.descriptions)" Title="Mô tả" Width="160px" />
+        <RadzenDataGridColumn Title="Thao tác" Width="100px" Filterable="false" Sortable="false">
+            <Template Context="data">
+                <a class="text-primary cursor-pointer" onclick="location.href='/product/edit/@data.id'">
+                    <RadzenIcon Icon="build" />
+                </a>
+                <a class="text-danger cursor-pointer" @onclick="()=> ConfirmDelete(data)">
+                    <RadzenIcon Icon="delete" />
+                </a>
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+<i class="fa fa-times" aria-hidden="true"></i>
+
+@code {
+    IQueryable<v_ProductCategory> products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        products = _dbContext.v_ProductCategory;
+
+    }
+
+    async Task ConfirmDelete(v_ProductCategory data)
+    {
+        var result = await DialogService.OpenAsync("Xác nhận", ds =>
+    @<div style="padding:1rem; text-align:center">
+        <p>Bạn có chắc muốn xóa sản phẩm này?</p>
+        <RadzenButton Text="OK" ButtonStyle="ButtonStyle.Danger" Click="() => ds.Close(true)" Style="margin-right:10px" />
+        <RadzenButton Text="Hủy" ButtonStyle="ButtonStyle.Light" Click="() => ds.Close(false)" />
+    </div>,
+        new DialogOptions() { Width = "400px", Height = "200px" });
+
+        if (result == true)
+        {
+            // tìm trong bảng PRODUCT
+            var product = await _dbContext.PRODUCT
+                                          .FirstOrDefaultAsync(p => p.id == data.id);
+
+            if (product != null)
+            {
+                _dbContext.PRODUCT.Remove(product);
+                await _dbContext.SaveChangesAsync();
+                products = _dbContext.v_ProductCategory.AsQueryable();
+            }
+        }
+    }
+
+}
